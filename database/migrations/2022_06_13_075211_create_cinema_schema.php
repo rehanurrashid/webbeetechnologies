@@ -38,7 +38,7 @@ class CreateCinemaSchema extends Migration
     {
         Schema::create('movies', function($table) {
             $table->increments('id');
-            $table->string('duration');
+            $table->string('title');
             $table->string('description');
             $table->string('duration');
             $table->timestamps();
@@ -53,6 +53,8 @@ class CreateCinemaSchema extends Migration
 
         Schema::create('shows', function($table) {
             $table->increments('id');
+            $table->integer('movie_id')->unsigned()->nullable();
+            $table->integer('showroom_id')->unsigned()->nullable();
             $table->foreign('movie_id')->references('id')->on('movies');
             $table->foreign('showroom_id')->references('id')->on('showrooms');
             $table->string('start_time');
@@ -62,6 +64,8 @@ class CreateCinemaSchema extends Migration
 
         Schema::create('bookings', function($table) {
             $table->increments('id');
+            $table->integer('show_id')->unsigned()->nullable();
+            $table->integer('seat_type_id')->unsigned()->nullable();
             $table->foreign('show_id')->references('id')->on('shows');
             $table->foreign('seat_type_id')->references('id')->on('seattypes');
             $table->integer('user_id');
@@ -71,6 +75,7 @@ class CreateCinemaSchema extends Migration
 
         Schema::create('pricing', function($table) {
             $table->increments('id');
+            $table->integer('show_id')->unsigned()->nullable();
             $table->foreign('show_id')->references('id')->on('shows');
             $table->integer('price');
             $table->timestamps();
